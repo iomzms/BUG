@@ -515,8 +515,8 @@ elif [ $OS = 'x86_64' ]; then
 fi
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=443/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 443 -p 110 -p 109"/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 442 -p 110 -p 109"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 service ssh restart
@@ -668,8 +668,8 @@ socket = a:SO_REUSEADDR=1
 socket = l:TCP_NODELAY=1
 socket = r:TCP_NODELAY=1
 [dropbear]
-accept = 442
-connect = 127.0.0.1:443
+accept = 443
+connect = 127.0.0.1:442
 connect = 127.0.0.1:109
 connect = 127.0.0.1:110
 ;[squid]
@@ -695,15 +695,17 @@ echo "=============================="
 echo "        INSTALL BADVPN       "
 echo "=============================="
 cd
-#install webmin
-cat >> /etc/apt/sources.list <<-END
-deb http://download.webmin.com/download/repository sarge contrib
-deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib
-END
 
-wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
-apt-get update
-apt-get -y install webmin
+# install webmin
+cd
+wget "http://script.hostingtermurah.net/repo/webmin_1.801_all.deb"
+dpkg --install webmin_1.801_all.deb;
+apt-get -y -f install;
+sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
+rm /root/webmin_1.801_all.deb
+service webmin restart
+service vnstat restart
+apt-get -y --force-yes -f install libxml-parser-perl
 service vnstat restart
 echo -e "\e[40;38;5;101m " 
 echo "=============================="
