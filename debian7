@@ -56,7 +56,7 @@ vps="blangkon";
 #if [[ $vps = "zvur" ]]; then
 	#source="http://"
 #else
-	source="http://x.apache07.me/Debian7"
+	source="https://raw.githubusercontent.com/iomzms/BUG/master"
 #fi
 
 
@@ -695,14 +695,15 @@ echo "=============================="
 echo "        INSTALL BADVPN       "
 echo "=============================="
 cd
-#wget -O webmin-current.deb http://prdownloads.sourceforge.net/webadmin/webmin_1.760_all.deb
-wget -O webmin-current.deb $source/webmin-current.deb
-dpkg -i --force-all webmin-current.deb
-apt-get -y -f install;
-#sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
-rm -f /root/webmin-current.deb
-apt-get -y --force-yes -f install libxml-parser-perl
-service webmin restart
+#install webmin
+cat >> /etc/apt/sources.list <<-END
+deb http://download.webmin.com/download/repository sarge contrib
+deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib
+END
+
+wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
+apt-get update
+apt-get -y install webmin
 service vnstat restart
 echo -e "\e[40;38;5;101m " 
 echo "=============================="
