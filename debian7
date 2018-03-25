@@ -1,24 +1,24 @@
 #!/bin/bash
 echo -e "\e[40;38;5;226m " 
 echo " WELCOME TO AUTOSCRIPT VpsProject "
-echo "################################################################################" 
-echo "#                                                                              #" 
-echo "#      SSSSSSSSSSSSSSSSS  sssssssssssssssss  HHHHHHHHH        HHHHHHHHH        #" 
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" 
-echo "#      SSSSSS             SSSSSS             HHHHHHHHH        HHHHHHHHH        #" 
-echo "#      SSSSSS             SSSSSS             HHHHHHHHH        HHHHHHHHH        #" 
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHHHHHHHHHHHHHHHHHHH        #" 
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHHHHHHHHHHHHHHHHHHH        #" 
-echo "#                 SSSSSS             SSSSSS  HHHHHHHHH        HHHHHHHHH        #" 
-echo "#                 SSSSSS             SSSSSS  HHHHHHHHH        HHHHHHHHH        #"
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" 
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" 
-echo "#------------------------------------------------------------------------------#" 
-echo "#          SELAMAT DATANG DI SCRIPT AUTO SETUP VPS BY VPSPROJECT.              #" 
-echo "#                       SCRIPT VERSION V2.0 FOR DEBIAN 7-8-9                   #"
-echo "#                               SEMOGA BERMANFAAT                              #" 
-echo "#------------------------------------------------------------------------------#" 
-echo "################################################################################"
+echo "###############################################################" 
+echo "#                                                             #" 
+echo "#      SSSSSSSSSSSSS  ssssssssssssss  HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#      SSS            SSS             HHHH        HHHH        #" 
+echo "#      SSS            SSS             HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHHHHHHHHHHHHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHHHHHHHHHHHHHH        #" 
+echo "#                SSS             SSS  HHHH        HHHH        #" 
+echo "#                SSS             SSS  HHHH        HHHH        #"
+echo "#      SSSSSSSSSSSSSS  SSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSSS  SSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#-------------------------------------------------------------#" 
+echo "#   SELAMAT DATANG DI SCRIPT AUTO SETUP VPS BY VPSPROJECT.    #" 
+echo "#             SCRIPT VERSION V2.0 FOR DEBIAN 7-8-9            #"
+echo "#                       SEMOGA BERMANFAAT                     #" 
+echo "#-------------------------------------------------------------#" 
+echo "################################################################"
 echo "========================================"
 echo "CLICK 'I' SETUP VPS Non-Local"
 echo "CLICK 'L' SETUP VPS Local" 
@@ -423,7 +423,8 @@ rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 wget -O /etc/nginx/nginx.conf $source/nginx.conf
 mkdir -p /home/vps/public_html
-echo "<pre>Welcome webserver kopet mania</pre>" > /home/vps/public_html/index.html
+echo "<pre>Modified by Yuri Bhuana</pre>" > /home/vps/public_html/index.html
+echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 wget -O /etc/nginx/conf.d/vps.conf $source/vps.conf
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
 service php5-fpm restart
@@ -486,6 +487,7 @@ sed -i 's/Port 22/Port 22/g' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
 sed -i 's/#Banner/Banner/g' /etc/ssh/sshd_config
 service ssh restart
+
 # update OpenSSH
 wget $source/openssh-7.5p1-openssl-1.1.0-1.patch
 wget $source/openssh-7.5p1.tar.gz
@@ -605,15 +607,6 @@ make install
 screen badvpn-udpgw --listen-addr 127.0.0.1:7300 > /dev/null &
 cd
 
-#if [[ $ether = "eth0" ]]; then
-#	wget -O /etc/iptables.conf $source/Debian7/iptables.up.rules.eth0
-#else
-#	wget -O /etc/iptables.conf $source/Debian7/iptables.up.rules.venet0
-#fi
-
-#sed -i $MYIP2 /etc/iptables.conf;
-#iptables-restore < /etc/iptables.conf;
-
 # blockir torrent
 iptables -A OUTPUT -p tcp --dport 6881:6889 -j DROP
 iptables -A OUTPUT -p udp --dport 1024:65534 -j DROP
@@ -629,9 +622,66 @@ iptables -A FORWARD -m string --algo bm --string "torrent" -j DROP
 iptables -A FORWARD -m string --algo bm --string "announce" -j DROP
 iptables -A FORWARD -m string --algo bm --string "info_hash" -j DROP
 
+#if [[ $ether = "eth0" ]]; then
+#	wget -O /etc/iptables.conf $source/iptables.up.rules.eth0
+#else
+#	wget -O /etc/iptables.conf $source/iptables.up.rules.venet0
+#fi
+
+#sed -i $MYIP2 /etc/iptables.conf;
+#iptables-restore < /etc/iptables.conf;
+
+# block all port except
+#sed -i '$ i\iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 21 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 22 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 53 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 81 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 109 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 110 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 143 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 1194 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 3128 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 8000 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 8080 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp --dport 10000 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p udp -m udp --dport 2500 -j ACCEPT' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p udp -m udp -j DROP' /etc/rc.local
+#sed -i '$ i\iptables -A OUTPUT -p tcp -m tcp -j DROP' /etc/rc.local
+
 # install fail2ban
-apt-get -y install fail2ban;
-service fail2ban restart
+apt-get update;apt-get -y install fail2ban;service fail2ban restart;
+
+# Instal (D)DoS Deflate
+if [ -d '/usr/local/ddos' ]; then
+	echo; echo; echo "Please un-install the previous version first"
+	exit 0
+else
+	mkdir /usr/local/ddos
+fi
+clear
+echo; echo 'Installing DOS-Deflate 0.6'; echo
+echo; echo -n 'Downloading source files...'
+wget -q -O /usr/local/ddos/ddos.conf http://www.inetbase.com/scripts/ddos/ddos.conf
+echo -n '.'
+wget -q -O /usr/local/ddos/LICENSE http://www.inetbase.com/scripts/ddos/LICENSE
+echo -n '.'
+wget -q -O /usr/local/ddos/ignore.ip.list http://www.inetbase.com/scripts/ddos/ignore.ip.list
+echo -n '.'
+wget -q -O /usr/local/ddos/ddos.sh http://www.inetbase.com/scripts/ddos/ddos.sh
+chmod 0755 /usr/local/ddos/ddos.sh
+cp -s /usr/local/ddos/ddos.sh /usr/local/sbin/ddos
+echo '...done'
+echo; echo -n 'Creating cron to run script every minute.....(Default setting)'
+/usr/local/ddos/ddos.sh --cron > /dev/null 2>&1
+echo '.....done'
+echo; echo 'Installation has completed.'
+echo 'Config file is at /usr/local/ddos/ddos.conf'
+echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
 echo -e "\e[40;38;5;101m " 
 echo "=============================="
@@ -650,13 +700,6 @@ echo "=============================="
 echo "      INSTALL UNSHc         "
 echo "=============================="
 # script unshc
-
-# install ddos deflate
-apt-get -y install dnsutils dsniff
-wget https://raw.githubusercontent.com/abehake/script/master/ddos-deflate-master.zip
-unzip ddos-deflate-master.zip
-cd ddos-deflate-master
-./install.sh
 
 # install stunnel
 apt-get install stunnel4 -y
@@ -721,73 +764,51 @@ echo "        INSTALL MENJ       "
 echo "=============================="
 # download script
 cd
-wget -O /usr/bin/motd $source/motd
-wget -O /usr/bin/benchmark $source/benchmark.sh
-wget -O /usr/bin/speedtest $source/speedtest_cli.py
-wget -O /usr/bin/ps-mem $source/ps_mem.py
-wget -O /usr/bin/dropmon $source/dropmon.sh
-wget -O /usr/bin/menu $source/menu.sh
-wget -O /usr/bin/user-active-list $source/user-active-list.sh
-wget -O /usr/bin/user-add $source/user-add.sh
-wget -O /usr/bin/user-add-pptp $source/user-add-pptp.sh
-wget -O /usr/bin/user-del $source/user-del.sh
-wget -O /usr/bin/disable-user-expire $source/disable-user-expire.sh
-wget -O /usr/bin/delete-user-expire $source/delete-user-expire.sh
-wget -O /usr/bin/banned-user $source/banned-user.sh
-wget -O /usr/bin/unbanned-user $source/unbanned-user.sh
-wget -O /usr/bin/user-expire-list $source/user-expire-list.sh
-wget -O /usr/bin/user-gen $source/user-gen.sh
-wget -O /usr/bin/userlimit.sh $source/userlimit.sh
-wget -O /usr/bin/userlimitssh.sh $source/userlimitssh.sh
-wget -O /usr/bin/user-list $source/user-list.sh
-wget -O /usr/bin/user-login $source/user-login.sh
-wget -O /usr/bin/user-pass $source/user-pass.sh
-wget -O /usr/bin/user-renew $source/user-renew.sh
-wget -O /usr/bin/clearcache.sh $source/clearcache.sh
-wget -O /usr/bin/bannermenu $source/bannermenu
-cd
-
-#rm -rf /etc/cron.weekly/
-#rm -rf /etc/cron.hourly/
-#rm -rf /etc/cron.monthly/
-rm -rf /etc/cron.daily/
-wget -O /root/passwd $source/passwd.sh
-chmod +x /root/passwd
-echo "01 23 * * * root /root/passwd" > /etc/cron.d/passwd
-
-echo "*/30 * * * * root service dropbear restart" > /etc/cron.d/dropbear
-echo "00 23 * * * root /usr/bin/disable-user-expire" > /etc/cron.d/disable-user-expire
-echo "0 */12 * * * root /sbin/reboot" > /etc/cron.d/reboot
-#echo "00 01 * * * root echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a" > /etc/cron.d/clearcacheram3swap
-echo "*/30 * * * * root /usr/bin/clearcache.sh" > /etc/cron.d/clearcache1
-
-cd
-chmod +x /usr/bin/motd
+wget -O /usr/bin/benchmark "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/benchmark.sh"
+wget -O /usr/bin/speedtest "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/speedtest.py"
+wget -O /usr/bin/ps_mem "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/ps_mem.py"
+#wget -O /etc/issue.net "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/banner"
+wget -O /usr/bin/dropmon "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/dropmon.sh"
+wget -O /usr/bin/menu "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/menu.sh"
+wget -O /usr/bin/user-add "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-add.sh"
+wget -O /usr/bin/user-add-vpn "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-add-vpn.sh"
+wget -O /usr/bin/user-add-pptp "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-add-pptp.sh"
+wget -O /usr/bin/user-expire "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-expire.sh"
+wget -O /usr/bin/user-gen "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-gen.sh"
+wget -O /usr/bin/user-limit "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-limit.sh"
+wget -O /usr/bin/user-list "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-list.sh"
+wget -O /usr/bin/user-login "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-login.sh"
+wget -O /usr/bin/user-active-list "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-active-list.sh"
+wget -O /usr/bin/user-renew "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-renew.sh"
+wget -O /usr/bin/user-del "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-del.sh"
+wget -O /usr/bin/user-pass "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-pass.sh"
+wget -O /usr/bin/user-expire-list "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-expire-list.sh"
+wget -O /usr/bin/user-banned "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/user-banned.sh"
+wget -O /usr/bin/unbanned-user "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/unbanned-user.sh"
+wget -O /usr/bin/delete-user-expire "https://raw.githubusercontent.com/brantbell/wulandari/srie/repo/delete-user-expire.sh"
+echo "0 0 * * * root /usr/bin/user-expire" > /etc/cron.d/user-expire
+echo "* * * * * service dropbear restart" > /etc/cron.d/dropbear
 chmod +x /usr/bin/benchmark
 chmod +x /usr/bin/speedtest
-chmod +x /usr/bin/ps-mem
-#chmod +x /usr/bin/autokill
+chmod +x /usr/bin/ps_mem
 chmod +x /usr/bin/dropmon
 chmod +x /usr/bin/menu
-chmod +x /usr/bin/user-active-list
 chmod +x /usr/bin/user-add
+chmod +x /usr/bin/user-add-vpn
 chmod +x /usr/bin/user-add-pptp
-chmod +x /usr/bin/user-del
-chmod +x /usr/bin/disable-user-expire
-chmod +x /usr/bin/delete-user-expire
-chmod +x /usr/bin/banned-user
-chmod +x /usr/bin/unbanned-user
-chmod +x /usr/bin/user-expire-list
+chmod +x /usr/bin/user-expire
 chmod +x /usr/bin/user-gen
-chmod +x /usr/bin/userlimit.sh
-chmod +x /usr/bin/userlimitssh.sh
+chmod +x /usr/bin/user-limit
 chmod +x /usr/bin/user-list
 chmod +x /usr/bin/user-login
-chmod +x /usr/bin/user-pass
+chmod +x /usr/bin/user-active-list
 chmod +x /usr/bin/user-renew
-chmod +x /usr/bin/clearcache.sh
-chmod +x /usr/bin/bannermenu
-cd
+chmod +x /usr/bin/user-del
+chmod +x /usr/bin/user-pass
+chmod +x /usr/bin/user-expire-list
+chmod +x /usr/bin/user-banned
+chmod +x /usr/bin/unbanned-user
+chmod +x /usr/bin/delete-user-expire
 
 # swap ram
 dd if=/dev/zero of=/swapfile bs=2048 count=2048k
@@ -835,24 +856,24 @@ rm -f /root/.bash_history && history -c
 echo "unset HISTFILE" >> /etc/profile
 # info
 clear
-echo "################################################################################" | lolcat
-echo "#                                                                              #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  sssssssssssssssss  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSS             SSSSSS             HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSS             SSSSSS             HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHHHHHHHHHHHHHHHHHHH        #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHHHHHHHHHHHHHHHHHHH        #" | lolcat
-echo "#                 SSSSSS             SSSSSS  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#                 SSSSSS             SSSSSS  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#      SSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSS  HHHHHHHHH        HHHHHHHHH        #" | lolcat
-echo "#------------------------------------------------------------------------------#" | lolcat
-echo "#          SELAMAT DATANG DI SCRIPT AUTO SETUP VPS BY VPSPROJECT.              #" | lolcat
-echo "#                       SCRIPT VERSION V2.0 FOR DEBIAN 7-8-9                   #" | lolcat
-echo "#                               SEMOGA BERMANFAAT                              #" | lolcat
-echo "#------------------------------------------------------------------------------#" | lolcat
-echo "################################################################################" | lolcat
+echo "###############################################################" 
+echo "#                                                             #" 
+echo "#      SSSSSSSSSSSSS  ssssssssssssss  HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#      SSS            SSS             HHHH        HHHH        #" 
+echo "#      SSS            SSS             HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHHHHHHHHHHHHHH        #" 
+echo "#      SSSSSSSSSSSSS  SSSSSSSSSSSSSS  HHHHHHHHHHHHHHHH        #" 
+echo "#                SSS             SSS  HHHH        HHHH        #" 
+echo "#                SSS             SSS  HHHH        HHHH        #"
+echo "#      SSSSSSSSSSSSSS  SSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#      SSSSSSSSSSSSSS  SSSSSSSSSSSSS  HHHH        HHHH        #" 
+echo "#-------------------------------------------------------------#" 
+echo "#   SELAMAT DATANG DI SCRIPT AUTO SETUP VPS BY VPSPROJECT.    #" 
+echo "#             SCRIPT VERSION V2.0 FOR DEBIAN 7-8-9            #"
+echo "#                       SEMOGA BERMANFAAT                     #" 
+echo "#-------------------------------------------------------------#" 
+echo "################################################################"
 echo "============================================================" | tee -a log-install.txt| lolcat
 echo " FINSIH AND THANK YOU / Please Restart You VPS     "| tee -a log-install.txt| lolcat
 echo "============================================================" | tee -a log-install.txt| lolcat
